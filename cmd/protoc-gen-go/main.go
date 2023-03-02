@@ -35,8 +35,9 @@ func main() {
 	}
 
 	var (
-		flags   flag.FlagSet
-		plugins = flags.String("plugins", "", "deprecated option")
+		flags        flag.FlagSet
+		plugins      = flags.String("plugins", "", "deprecated option")
+		jsonRequired = flags.String("json_required", "false", "set json_required=true to remove json `omitempty option` ")
 	)
 	protogen.Options{
 		ParamFunc: flags.Set,
@@ -47,6 +48,9 @@ func main() {
 		}
 		for _, f := range gen.Files {
 			if f.Generate {
+				if *jsonRequired == "true" {
+					gengo.JsonRequired = true
+				}
 				gengo.GenerateFile(gen, f)
 			}
 		}

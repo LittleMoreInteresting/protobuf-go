@@ -33,6 +33,8 @@ var SupportedFeatures = uint64(pluginpb.CodeGeneratorResponse_FEATURE_PROTO3_OPT
 // GenerateVersionMarkers specifies whether to generate version markers.
 var GenerateVersionMarkers = true
 
+var JsonRequired = false
+
 // Standard library dependencies.
 const (
 	base64Package  = protogen.GoImportPath("encoding/base64")
@@ -720,6 +722,9 @@ func fieldDefaultValue(g *protogen.GeneratedFile, f *fileInfo, m *messageInfo, f
 }
 
 func fieldJSONTagValue(field *protogen.Field) string {
+	if JsonRequired {
+		return string(field.Desc.Name())
+	}
 	return string(field.Desc.Name()) + ",omitempty"
 }
 
